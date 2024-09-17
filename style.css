@@ -1,0 +1,44 @@
+@keyframes ShowMessageAnimation {
+    0%{
+        top: -20px
+    }
+    10%{
+        top: 0px
+    }
+    90%{
+        top: 0px
+    }
+    100%{
+        top: -20px
+    }
+    
+}
+.area {
+    display: flex; 
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.baseMessage {
+    position: fixed;
+    padding: 5px;
+    border-radius: 0 0 10px 10px;
+    font-size: 1rem;
+    top: 0px;
+    z-index: 100;
+    animation-name: ShowMessageAnimation;
+    animation-duration: 5s;
+}
+
+.errorMessage {
+    background-color: red;
+    color: white;
+
+}
+
+.successMessage  {
+    background-color: green;
+    color: white;
+
+}
