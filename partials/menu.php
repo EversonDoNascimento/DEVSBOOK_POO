@@ -49,7 +49,7 @@ require_once("./config.php");
         </div>
     </a>
     <div class="menu-splitter"></div>
-    <a href="<?=$base?>/config.php" >
+    <a href="<?=$base?>/configuracoes.php" >
         <div class="menu-item <?= $activeMenu == "Config" ? 'active': ''?>">
             <div class="menu-item-icon">
                 <img src="<?=$base;?>/assets/images/settings.png" width="16" height="16" />
