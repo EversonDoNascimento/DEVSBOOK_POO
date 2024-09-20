@@ -42,7 +42,7 @@ require_once("./partials/header.php");
     .config-form label input {
         border-radius: 10px;
         border: 1px solid #4A76A8 ;
-        padding: 5px;
+        padding: 10px;
   
     }
 
@@ -88,6 +88,15 @@ require_once("./partials/header.php");
         
     }
   </style>
+   <?php
+        if(!empty($_SESSION['error'])){
+            echo "<div class='area'>
+                        <div class='errorMessage baseMessage'>". $_SESSION['error']."</div>
+                    </div>";
+            $_SESSION['error'] = "";
+        }
+    ?>
+   
     <section class="container main">
        <?php require_once("./partials/menu.php")?>
         <section class="feed mt-10">
@@ -96,7 +105,7 @@ require_once("./partials/header.php");
                 <label >
                     Novo Avatar:
                     <div style="position: relative; width: 100%">
-                         <span class="style-input-file">Clique aqui para selecionar o foto do perfil</span>
+                         <span class="style-input-file">Clique aqui para selecionar a foto do perfil</span>
                          <input class="input-file" type="file" name="avatar"/>
                     </div>
        
@@ -104,30 +113,30 @@ require_once("./partials/header.php");
                 <label>
                     Nova Capa:
                     <div style="position: relative; width: 100%">
-                        <span class="style-input-file">Clique aqui para selecionar o foto de capa</span>
+                        <span class="style-input-file">Clique aqui para selecionar a foto de capa</span>
                         <input class="input-file"   type="file" name="cover"/>
                     </div>
                 </label>
                 <div class="line"></div>
                 <label>
                     Nome Completo:
-                    <input type="text" name="name" placeholder="Nome">
+                    <input type="text" name="name" placeholder="Nome" value="<?=$user->getName()?>">
                 </label>
                 <label >
                     Email:
-                    <input type="email" name="email" placeholder="Email">
+                    <input type="email" name="email" placeholder="Email" value="<?=$user->getEmail()?>">
                 </label>
                 <label >
                     Cidade:
-                    <input type="text" name="city" placeholder="Cidade">
+                    <input type="text" name="city" placeholder="Cidade" value="<?=$user->getCity()?>">
                 </label>
                 <label >
                     Trabalho:
-                    <input type="text" name="work" placeholder="Trabalho">
+                    <input type="text" name="work" placeholder="Trabalho" value="<?=$user->getWork()?>">
                 </label>
                 <label >
                     Data de Aniversário:
-                    <input type="text" name="birthdate" placeholder="Data de aniversário">
+                    <input type="text" name="birthdate" id="birthdate" placeholder="Data de aniversário" value="<?=date("d/m/Y", strtotime($user->getBirthdate()))?>">
                 </label>
                 <div class="line"></div>
                 <label >
@@ -144,5 +153,15 @@ require_once("./partials/header.php");
         </section>
     </section>
     <?php require_once("./partials/footer.php")?>
+    <script src="ElementsController.js"></script>
+    <script src="https://unpkg.com/imask"></script>
+    <script>
+        IMask(
+            document.getElementById("birthdate"),
+            {
+                mask: "00/00/0000"
+            }
+        )
+    </script>
 </body>
 </html>

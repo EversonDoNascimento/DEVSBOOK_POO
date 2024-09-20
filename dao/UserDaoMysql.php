@@ -21,6 +21,7 @@ class UserDaoMysql implements UserDAO{
                 $user->setName($data['name']);
                 $user->setEmail($data['email']);
                 $user->setBirthdate($data['birthdate']);
+                $user->setPassword($data['password']);
                 $user->setCity($data['city'] ?? "");
                 $user->setWork($data['work'] ?? "");
                 $user->setAvatar($data['avatar'] ?? "");

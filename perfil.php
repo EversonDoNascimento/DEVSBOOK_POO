@@ -103,7 +103,7 @@ $currentYear = new DateTime();
                             <?php if($userProfile->getWork()) :?>
                                 <div class="user-info-mini">
                                     <img src="<?=$base?>/assets/images/work.png" />
-                                    B7Web
+                                    <?= $userProfile->getWork() ?? "Sem informações"?>
                                 </div>
                             <?php endif?>
 
