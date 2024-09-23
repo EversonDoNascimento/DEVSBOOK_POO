@@ -1,8 +1,13 @@
 <?php
 require_once("./models/Post.php");
-require("./dao/RelationDaoMysql.php");
+require_once("./dao/RelationDaoMysql.php");
+require_once("./dao/PostLikeDao.php");
 class PostDaoMysql implements PostDAO{
     private PDO $pdo;
+    private function _postlike(){
+        $likeDao = new PostLikeDaoMysql($this->pdo);
+        return $likeDao;
+    }
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
@@ -83,10 +88,18 @@ class PostDaoMysql implements PostDAO{
     private function _postToObject($post_list, $id_user){
         $userDao = new UserDaoMysql($this->pdo);
         $posts = [];
+        
         foreach($post_list as $p){
             $userTemp = $userDao->findUserById($p["id_user"]);
             $post = new Post();
-            $d = new DateTime($p["created_at"]);
+            $d = new DateTime($p["created_at"]); 
+            $qtdLikePost = $this->_postlike()->getLikes($p['id']);
+            $isLike = $this->_postlike()->isLiked($p['id'], $id_user);
+            // echo "<prev>";
+            // var_dump($isLike);
+            // $like = $this->_postlike()->likeToggle($p['id'],$id_user);   
+            // echo "<pre>";
+            // var_dump($like);
             $post->setId($p["id"]);
             $post->setBody($p["body"]);
             $post->setType($p["type"]);
@@ -98,8 +111,8 @@ class PostDaoMysql implements PostDAO{
             };
             if(!$userTemp ) return null;
             $post->setUser($userTemp);
-            $post->setLikeCount(0);
-            $post->setLiked(false);
+            $post->setLikeCount($qtdLikePost);
+            $post->setLiked($isLike);
             $post->setComments([]);
             array_push($posts, $post);
         }

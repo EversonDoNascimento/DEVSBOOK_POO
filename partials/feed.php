@@ -10,11 +10,12 @@ switch($item->getType()){
     default:
         break;
 }
-
+require_once("./partials/feed-item-script.php");
 ?>
 
-<div class="box feed-item">
+<div data-id-post="<?=$item->getId()?>" class="box feed-item">
     <div class="box-body">
+       
         <div class="feed-item-head row mt-20 m-width-20">
             <div class="feed-item-head-photo">
                 <a href="<?=$base?>/perfil.php<?=$linkProfile?>"><img src="<?=$base;?>/media/avatars/<?=$item->getUser()->getAvatar()?>" /></a>
@@ -39,7 +40,8 @@ switch($item->getType()){
         
         </div>
         <div class="feed-item-buttons row mt-20 m-width-20">
-            <div class="like-btn <?= $item->getLiked()? "on":"" ?>"><?=$item->getLikeCount()?></div>
+            <div  class="like-btn <?= $item->getLiked()? "on":"" ?>"><?=$item->getLikeCount()?>
+            </div>
             <div class="msg-btn"><?= sizeof($item->getComments())?></div>
         </div>
         <div class="feed-item-comments">
@@ -74,3 +76,4 @@ switch($item->getType()){
         </div>
     </div>
 </div>
+
