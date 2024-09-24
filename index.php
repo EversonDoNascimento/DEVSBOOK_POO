@@ -75,5 +75,6 @@ $posts = $postDao->getHomePosts($user);
         </section>
     </section>
     <?php require_once("./partials/footer.php")?>
+    <?php require_once("./partials/feed-comment-script.php")?>
 </body>
 </html>

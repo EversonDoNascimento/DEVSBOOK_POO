@@ -11,6 +11,11 @@ switch($item->getType()){
         break;
 }
 require_once("./partials/feed-item-script.php");
+require_once("./dao/CommentDaoMysql.php");
+
+$comments = [];
+$commentDao = new CommentDaoMysql($config->getConn());
+$comments = $commentDao->listCommentsPost($item->getId());
 ?>
 
 <div data-id-post="<?=$item->getId()?>" class="box feed-item">
@@ -45,33 +50,26 @@ require_once("./partials/feed-item-script.php");
             <div class="msg-btn"><?= sizeof($item->getComments())?></div>
         </div>
         <div class="feed-item-comments">
-            
-            <!-- <div class="fic-item row m-height-10 m-width-20">
-                <div class="fic-item-photo">
-                    <a href=""><img src="<?=$base;?>/media/avatars/avatar.jpg" /></a>
-                </div>
-                <div class="fic-item-info">
-                    <a href="">Bonieky Lacerda</a>
-                    Comentando no meu próprio post
-                </div>
-            </div>
-
-            <div class="fic-item row m-height-10 m-width-20">
-                <div class="fic-item-photo">
-                    <a href=""><img src="<?=$base;?>/media/avatars/avatar.jpg" /></a>
-                </div>
-                <div class="fic-item-info">
-                    <a href="">Bonieky Lacerda</a>
-                    Muito legal, parabéns!
-                </div>
-            </div> -->
-
             <div class="fic-answer row m-height-10 m-width-20">
                 <div class="fic-item-photo">
                     <a href=""><img src="<?=$base;?>/media/avatars/<?= $user->getAvatar()?>" /></a>
-                </div>
-                <input type="text" class="fic-item-field" placeholder="Escreva um comentário" />
+                </div> 
+                <input  type="text" name="body" class="comment fic-item-field" placeholder="Escreva um comentário" />
             </div>
+            <?php if(sizeof($comments) > 0):?>
+                <?php foreach($comments as $c):?>
+                    <div class="fic-item row m-height-10 m-width-20">
+                        <div class="fic-item-photo">
+                            <a href=""><img src="<?=$base;?>/media/avatars/<?=$c->getUser()->getAvatar()?>" /></a>
+                        </div>
+                        <div class="fic-item-info">
+                            <a href="<?=$base?>/perfil.php?id=<?=$c->getUser()->getId()?>"><?=$c->getUser()->getName()?></a>
+                            <?=$c->getBody()?>
+                        </div>
+                    </div>
+                <?php endforeach?>
+            <?php endif ?>
+            
 
         </div>
     </div>
