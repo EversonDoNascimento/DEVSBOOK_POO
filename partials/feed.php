@@ -11,11 +11,7 @@ switch($item->getType()){
         break;
 }
 require_once("./partials/feed-item-script.php");
-require_once("./dao/CommentDaoMysql.php");
 
-$comments = [];
-$commentDao = new CommentDaoMysql($config->getConn());
-$comments = $commentDao->listCommentsPost($item->getId());
 ?>
 
 <div data-id-post="<?=$item->getId()?>" class="box feed-item">
@@ -56,8 +52,8 @@ $comments = $commentDao->listCommentsPost($item->getId());
                 </div> 
                 <input  type="text" name="body" class="comment fic-item-field" placeholder="Escreva um comentário" />
             </div>
-            <?php if(sizeof($comments) > 0):?>
-                <?php foreach($comments as $c):?>
+            <?php if(sizeof($item->getComments()) > 0):?>
+                <?php foreach($item->getComments() as $c):?>
                     <div class="fic-item row m-height-10 m-width-20">
                         <div class="fic-item-photo">
                             <a href=""><img src="<?=$base;?>/media/avatars/<?=$c->getUser()->getAvatar()?>" /></a>

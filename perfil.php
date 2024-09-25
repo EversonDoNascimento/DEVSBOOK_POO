@@ -3,6 +3,7 @@ $activeMenu = "Perfil";
 require_once("./config.php");
 require_once("./models/Auth.php");
 require_once("./dao/PostDaoMysql.php");
+require_once("./dao/RelationDaoMysql.php");
 $config = new Config();
 $auth = new Auth($config->getConn(), $base);
 $user = $auth->checkToken();
@@ -36,6 +37,8 @@ $dateBirthdate = new DateTime($userProfile->getBirthdate());
 $birthDate = $dateBirthdate->format("Y");
 $currentYear = new DateTime();
 
+$relationDao = new RelationDaoMysql($config->getConn());
+$isFollow = $relationDao->findRelation($user, $userProfile);
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +50,21 @@ $currentYear = new DateTime();
     <link rel="stylesheet" href="<?=$base;?>/assets/css/style.css" />
 </head>
 <body>
-   
+   <style>
+        .btn-follow {
+            border: none;
+            background-color: #4A76A8;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-follow:hover{
+            scale: 102%;
+            transition: all;
+            transition-duration: .2s;
+        }
+   </style>
     <section class="container main">
         <?php require_once("./partials/menu.php")?>
         <section class="feed">
@@ -65,6 +82,17 @@ $currentYear = new DateTime();
                                 <div class="profile-info-location"><?= $userProfile->getCity()? $userProfile->getCity():"Sem informações"?></div>
                             </div>
                             <div class="profile-info-data row">
+                                <?php if($user->getId() !== $userProfile->getId()):?>
+                                    <div>
+                                        <form action="<?=$base?>/follow_action.php" method="POST">
+                                            <input type="hidden" value="<?=$userProfile->getId()?>" name="user_to">
+                                            <button class="btn-follow" type="submit">
+                                               <?= $isFollow ? "Deixar de seguir":"Seguir"?>
+                                            </button>
+                                        </form>
+                                    </div>
+                                <?php endif ?>
+
                                 <div class="profile-info-item m-width-20">
                                     <div class="profile-info-item-n"><?= sizeof($userProfile->getFollowers()) ?></div>
                                     <div class="profile-info-item-s">Seguidores</div>

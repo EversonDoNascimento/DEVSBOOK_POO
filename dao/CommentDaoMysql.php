@@ -11,12 +11,13 @@ class CommentDaoMysql implements CommentDAO {
         $this->pdo = $pdo;
     }
     public function createComment(Comment $comment) : bool{
-        if($comment){
+        if($comment){     
             $sql = $this->pdo->prepare("INSERT INTO postscomments(id_post, id_user, created_at, body) VALUES(:id_post, :id_user, NOW(), :body)");
             $sql->bindValue(":id_post", $comment->getIdPost());
             $sql->bindValue(":id_user", $comment->getIdUser());
             $sql->bindValue(":body", $comment->getBody());
             $sql->execute();
+         
             return true;
         }
         return false;

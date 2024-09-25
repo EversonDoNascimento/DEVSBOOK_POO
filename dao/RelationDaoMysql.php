@@ -15,7 +15,13 @@ class RelationDaoMysql implements UserRelationDAO{
         $find_user_to = $userDao->findByEmail($id_user_to->getEmail());
         if(!$find_user_to && !$find_user_from) return false;
         $findRelation = $this->findRelation($id_user_from, $id_user_to);
-        if($findRelation) return true;
+        if($findRelation){
+            $sql = $this->pdo->prepare("DELETE FROM userrelations WHERE user_from = :user_from AND user_to = :user_to");
+            $sql->bindValue(":user_from", $id_user_from->getId());
+            $sql->bindValue(":user_to", $id_user_to->getId());
+            $sql->execute();
+            return true;
+        } 
         if($id_user_from->getId() && $id_user_to->getId()){
             $sql = $this->pdo->prepare("INSERT INTO userrelations (user_from, user_to) VALUES(:user_from, :user_to)");
             $sql->bindValue(":user_from", $id_user_from->getId());
