@@ -8,7 +8,6 @@ require_once("./config.php");
         </div>
     </div>
     <script type="text/javascript" src="<?=$base?>/assets/js/script.js"></script>
-    <!-- <script type="text/javascript" src="<?=$base?>/assets/js/vanillaModal.js"></script> -->
      <script src="<?=$base?>/ElementsController.js"></script>
     </body>
 </html>

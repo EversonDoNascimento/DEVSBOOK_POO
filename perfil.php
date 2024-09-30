@@ -174,7 +174,7 @@ $isFollow = $relationDao->findRelation($user, $userProfile);
                             <?php if(count($listPhotosPosts) > 0): ?>
                                 <?php for($index = 0; $index < 4; $index++): ?>
                                     <div class="user-photo-item">
-                                        <a href="#modal-1" rel="modal:open">
+                                        <a href="#modal-<?=$index + 1?>" rel="modal:open">
                                             <img src="<?=$base?>/media/uploads/<?=$listPhotosPosts[$index]->getBody()?>" />
                                         </a>
                                         <div id="modal-1" style="display:none">
@@ -201,5 +201,12 @@ $isFollow = $relationDao->findRelation($user, $userProfile);
         </section>
     </section>
     <?php require_once("./partials/footer.php")?>
+    <script type="text/javascript" src="<?=$base?>/assets/js/vanillaModal.js"></script>
+
+    <script>
+        window.onload(() => {
+            let modal = new VanillaModal();
+        })
+    </script>
 </body>
 </html>

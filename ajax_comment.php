@@ -27,3 +27,4 @@ if(!empty($id) && !empty($body)){
 
 header("Content-Type: application/json");
 echo json_encode($array);
+exit;

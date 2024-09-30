@@ -116,7 +116,13 @@ require_once("./partials/header.php");
             <div class="modal-content"></div>
         </div>
     </div>
+       
     <script type="text/javascript" src="assets/js/script.js"></script>
     <script type="text/javascript" src="assets/js/vanillaModal.js"></script>
+    <script>
+        window.onload(() => {
+            let modal = new VanillaModal();
+        })
+    </script>
 </body>
 </html>

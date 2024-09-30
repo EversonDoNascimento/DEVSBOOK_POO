@@ -2,3 +2,4 @@ _MODELO
 config.php
 media/avatars/**
 media/covers/**  
+media/uploads/** 
