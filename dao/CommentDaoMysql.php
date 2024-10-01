@@ -52,7 +52,19 @@ class CommentDaoMysql implements CommentDAO {
                 }
             }
         }
-        // print_r($listComments);
         return $listComments;
+    }
+
+    public function deleteAllCommentsPost(int $id_post): bool
+    {
+        if($id_post){
+            $sql = $this->pdo->prepare("DELETE FROM postscomments WHERE id_post = :id_post");
+            $sql->bindValue(":id_post", $id_post);
+            $sql->execute();
+            return true;
+
+        }
+
+        return false;
     }
 }

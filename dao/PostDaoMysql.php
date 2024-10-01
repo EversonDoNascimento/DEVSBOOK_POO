@@ -30,6 +30,20 @@ class PostDaoMysql implements PostDAO{
     }
     public function findPost(int $id): ?Post
     {
+        if($id){
+            $newPost = new Post();
+            $sql = $this->pdo->prepare("SELECT * FROM posts WHERE id = :id");
+            $sql->bindValue(":id", $id);
+            $sql->execute();
+            if($sql->rowCount() > 0){
+                $data = $sql->fetch(PDO::FETCH_ASSOC);
+                $newPost->setId($data['id']);
+                $newPost->setType($data['type']);
+                $newPost->setBody($data['body']);
+                $newPost->setIdUser($data['id_user']);
+                return $newPost;
+            }
+        }
         return null;
     }
     public function findPosts(): ?Post
@@ -127,5 +141,25 @@ class PostDaoMysql implements PostDAO{
             return [];
 
          }   
+    }
+
+    public function deletePost(int $postId, int $userId): bool
+    {
+        $findPost = $this->findPost($postId);
+        // print_r($findPost);
+        // exit;
+        if($findPost){
+            if($findPost->getIdUser() === $userId){
+                $commentDao = new CommentDaoMysql($this->pdo);
+                $this->_postlike()->deleteAllLikesPost($postId);
+                $commentDao->deleteAllCommentsPost($postId);
+                $sql = $this->pdo->prepare("DELETE FROM posts WHERE id = :idPost AND id_user = :idUser");
+                $sql->bindValue(":idPost", $postId);
+                $sql->bindValue(":idUser", $userId);
+                $sql->execute();
+                return true;
+            }
+        }
+        return false;
     }
 }

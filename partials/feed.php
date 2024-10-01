@@ -27,9 +27,11 @@ require_once("./partials/feed-item-script.php");
                 <br/>
                 <span class="fidi-date"><?=$item->getCreated_at()->format("d/m/Y")?></span>
             </div>
-            <div class="feed-item-head-btn">
-                <img src="<?=$base;?>/assets/images/more.png" />
-            </div>
+            <?php if($user->getId() === $item->getIdUser()): ?>
+                <div class="feed-item-head-btn containerDetails">
+                    <img src="<?=$base;?>/assets/images/more.png" />
+                </div>
+            <?php endif?>
         </div>
         <div class="feed-item-body mt-10 m-width-20">
             <?php if($item->getType() === "photo"):?>

@@ -44,4 +44,5 @@ interface PostLikeDAO {
     public function getLikes($id_post): int;
     public function isLiked($id_post, $id_user): bool;
     public function likeToggle($id_post, $id_user);
+    public function deleteAllLikesPost($id_post): bool;
 }

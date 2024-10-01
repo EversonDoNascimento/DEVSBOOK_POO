@@ -50,5 +50,6 @@ class Comment {
 interface CommentDAO {
     public function createComment(Comment $comment) : bool;
     public function listCommentsPost(int $id_post) : Array;
+    public function deleteAllCommentsPost(int $id_post): bool;
 
 }

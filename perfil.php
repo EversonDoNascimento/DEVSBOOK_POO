@@ -201,6 +201,8 @@ $isFollow = $relationDao->findRelation($user, $userProfile);
         </section>
     </section>
     <?php require_once("./partials/footer.php")?>
+    <?php require_once("./partials/feed-btn-script.php")?>
+
     <script type="text/javascript" src="<?=$base?>/assets/js/vanillaModal.js"></script>
 
     <script>

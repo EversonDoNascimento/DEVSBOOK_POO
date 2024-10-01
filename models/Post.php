@@ -81,5 +81,6 @@ interface PostDAO {
     public function findPostByUserId(int $userId);
     public function getHomePosts(User $userId);
     public function findPosts(): Post|null;
+    public function deletePost(int $postId, int $userId): bool;
 }
 
