@@ -21,6 +21,7 @@ if($id_user){
     $userProfile = $getUser;
 }
 $postsProfile = $postDao->findPostByUserId($userProfile->getId());
+
 $listPhotosPosts = $postDao->getPhotosUser($userProfile);
 $totalPhotos = 0;
 if($postsProfile > 0){
@@ -39,6 +40,7 @@ $currentYear = new DateTime();
 
 $relationDao = new RelationDaoMysql($config->getConn());
 $isFollow = $relationDao->findRelation($user, $userProfile);
+
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +70,7 @@ $isFollow = $relationDao->findRelation($user, $userProfile);
     <section class="container main">
         <?php require_once("./partials/menu.php")?>
         <section class="feed">
-
+    
             <div class="row">
                 <div class="box flex-1 border-top-flat">
                     <div class="box-body">
@@ -158,7 +160,6 @@ $isFollow = $relationDao->findRelation($user, $userProfile);
 
                 </div>
                 <div class="column pl-5">
-
                     <div class="box">
                         <div class="box-header m-10">
                             <div class="box-header-text">
@@ -169,24 +170,27 @@ $isFollow = $relationDao->findRelation($user, $userProfile);
                                 <a href="<?=$base?>/fotos.php?id=<?=$userProfile->getId()?>">ver todos</a>
                             </div>
                         </div>
+                           
                         <div class="box-body row m-20">
                             
                             <?php if(count($listPhotosPosts) > 0): ?>
-                                <?php for($index = 0; $index < 4; $index++): ?>
+                                <?php foreach($listPhotosPosts as $key => $value): ?>
                                     <div class="user-photo-item">
-                                        <a href="#modal-<?=$index + 1?>" rel="modal:open">
-                                            <img src="<?=$base?>/media/uploads/<?=$listPhotosPosts[$index]->getBody()?>" />
+                                        <a href="#modal-<?=$key + 1?>" rel="modal:open">
+                                            <img src="<?=$base?>/media/uploads/<?=$listPhotosPosts[$key]->getBody()?>" />
                                         </a>
                                         <div id="modal-1" style="display:none">
-                                            <img src="<?=$base?>/media/uploads/<?=$listPhotosPosts[$index]->getBody()?>" />
+                                            <img src="<?=$base?>/media/uploads/<?=$listPhotosPosts[$key]->getBody()?>" />
                                         </div>
                                     </div>
-                                <?php endfor ?>
+                                <?php endforeach ?>
                             <?php endif?>
                             
                         </div>
+
                     </div>
-                    <?php if(count($postsProfile) > 0):?>
+                   
+                    <?php if(count($postsProfile) > 0):?>                    
                         <div class="box feed-item">                       
                             <?php foreach($postsProfile as $item):?>
                             <?php require "./partials/feed.php"; ?>
@@ -201,14 +205,9 @@ $isFollow = $relationDao->findRelation($user, $userProfile);
         </section>
     </section>
     <?php require_once("./partials/footer.php")?>
-    <?php require_once("./partials/feed-btn-script.php")?>
+    <?php require_once("./partials/feed-comment-script.php")?>
 
-    <script type="text/javascript" src="<?=$base?>/assets/js/vanillaModal.js"></script>
 
-    <script>
-        window.onload(() => {
-            let modal = new VanillaModal();
-        })
-    </script>
+
 </body>
 </html>

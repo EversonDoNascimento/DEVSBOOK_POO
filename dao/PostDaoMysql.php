@@ -67,21 +67,43 @@ class PostDaoMysql implements PostDAO{
     }
     public function getHomePosts(User $userId, $profile = false)
     {    
+        $perPage = 5;
+        $page = 1;
+
+        $page = intval(filter_input(INPUT_GET, "p"));
+        if($page < 1){
+            $page = 1;
+        }
+        $offset = ($page - 1) * $perPage; // (0,2)
         if($userId->getId()){
             // Retornando a lista de quem eu sigo
             $relationDao = new RelationDaoMysql($this->pdo);
             $iFollowList = [];
             if($profile){
-                $iFollowList = [$userId->getId()];
+                array_push($iFollowList, $userId->getId());
             }else{
                 $iFollowList = $relationDao->Ifollow($userId);
+                array_push($iFollowList, $userId->getId());
+
+            }
+            $queryTotal  = $this->pdo->query("SELECT COUNT(*) as c FROM posts WHERE id_user IN (".implode(",",$iFollowList).")");
+            $totalData = $queryTotal->fetch();
+            if($totalData['c'] == 0){
+                return [[],0,0];
+            }
+            $total = ceil($totalData['c'] / $perPage);
+     
+            if($page > $total){
+                $page = $total;
+                $offset = ($page - 1) * $perPage; // (0,2)
             } 
             // Listando posts
-            $sql = $this->pdo->query("SELECT * FROM posts WHERE id_user IN (".implode(",",$iFollowList).") ORDER BY created_at DESC");
+            $sql = $this->pdo->query("SELECT * FROM posts WHERE id_user IN (".implode(",",$iFollowList).") ORDER BY created_at DESC LIMIT $offset,$perPage");
             if($sql->rowCount() > 0){
                 $data = $sql->fetchAll(PDO::FETCH_ASSOC);
-                return $this->_postToObject($data, $userId->getId());
+                return [$this->_postToObject($data, $userId->getId()), $total, $page];
             }
+            return [[],0,0];
 
          }          
     }
@@ -103,7 +125,6 @@ class PostDaoMysql implements PostDAO{
     private function _postToObject($post_list, $id_user){
         $userDao = new UserDaoMysql($this->pdo);
         $posts = [];
-        
         foreach($post_list as $p){
             $userTemp = $userDao->findUserById($p["id_user"]);
             $post = new Post();
@@ -157,6 +178,12 @@ class PostDaoMysql implements PostDAO{
                 $sql->bindValue(":idPost", $postId);
                 $sql->bindValue(":idUser", $userId);
                 $sql->execute();
+                if($findPost->getType() === "photo"){
+                    $img = "media/uploads/".$findPost->getBody();
+                    if(file_exists($img)){
+                        unlink($img);
+                    }
+                }
                 return true;
             }
         }

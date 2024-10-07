@@ -1,6 +1,6 @@
 <script>
-    window.onload = () => {
-        document.querySelectorAll('.like-btn').forEach((item) => {
+    window.addEventListener("load", () => {
+       document.querySelectorAll('.like-btn').forEach((item) => {
             item.addEventListener("click", () => {
                 let id = item.closest(".feed-item").getAttribute("data-id-post");
                 let count = parseInt(item.innerText);
@@ -14,7 +14,7 @@
 
                 fetch("ajax_like.php?id="+id);
             })
-        })
-    }
+        })        
+    })
 
 </script>

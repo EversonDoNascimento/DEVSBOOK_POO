@@ -10,7 +10,7 @@ $user = $auth->checkToken();
 $activeMenu = "Home";
 require_once("./partials/header.php");
 $postDao = new PostDaoMysql($config->getConn());
-$posts = $postDao->getHomePosts($user);
+list($posts, $totalPages, $currentPage) = $postDao->getHomePosts($user);
 
 ?>
 <!DOCTYPE html>
@@ -22,6 +22,35 @@ $posts = $postDao->getHomePosts($user);
     <link rel="stylesheet" href="<?=$base;?>/assets/css/style.css" />
 </head>
 <body>
+   <style>
+    .pagination {
+        display: flex;
+        gap: 5px;
+        width: 100%;
+        justify-content: center;
+        }
+    .pagination a {
+        padding: 10px;
+        border-radius: 3px;
+        color: white;
+        background-color: #4A76A8;
+        text-decoration: none;
+    }
+    .pagination a:hover { 
+        background-color: #D1D9E0;
+        color: #4A76A8;
+        font-weight: bold;
+        transition: all;
+        transition-duration: .4s;
+    }
+    .pagination .active { 
+        background-color: #D1D9E0;
+        color: #4A76A8;
+        font-weight: bold;
+        transition: all;
+        transition-duration: .4s;
+    }
+   </style>
    <?php
         if(!empty($_SESSION['error'])){
             echo "<div class='area'>
@@ -50,6 +79,13 @@ $posts = $postDao->getHomePosts($user);
                  <?php foreach($posts as $item):?>
                     <?php require("./partials/feed.php")?>
                  <?php endforeach?>
+                 <?php if($totalPages > 1):?> 
+                    <div class="pagination">
+                        <?php for($q=0; $q < $totalPages; $q++):?>
+                            <a class='<?=$currentPage === ($q+1) ? 'active':''?>'href='<?=$base."?p=".($q + 1);?>' ><?=($q + 1)?></a>
+                        <?php endfor?>
+                    </div>
+                 <?php endif?>
                 </div>
                 <div class="column side pl-5">
                     <div class="box banners">
@@ -74,8 +110,8 @@ $posts = $postDao->getHomePosts($user);
 
         </section>
     </section>
-    <?php require_once("./partials/footer.php")?>
+
     <?php require_once("./partials/feed-comment-script.php")?>
-    <?php require_once("./partials/feed-btn-script.php")?>
+    <?php require_once("./partials/footer.php")?>
 </body>
 </html>
